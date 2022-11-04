@@ -10,6 +10,7 @@ const { buildSlackAttachments, formatChannelName } = require('./src/utils');
     const color = core.getInput('color');
     const messageId = core.getInput('message_id');
     const messageText = core.getInput('message_text');
+    const variant = core.getInput('variant') ?? 'lg';
     const token = process.env.SLACK_BOT_TOKEN;
     const slack = new WebClient(token);
 
@@ -27,17 +28,12 @@ const { buildSlackAttachments, formatChannelName } = require('./src/utils');
     }
 
     const apiMethod = Boolean(messageId) ? 'update' : 'postMessage';
-
     const args = {
       channel: channelId,
-      text: messageText || undefined,
-      attachments,
+      text: messageText,
+      attachments: variant === 'lg' ? attachments : undefined,
+      ts: messageId,
     };
-
-    if (messageId) {
-      args.ts = messageId;
-    }
-
     const response = await slack.chat[apiMethod](args);
 
     core.setOutput('message_id', response.ts);
