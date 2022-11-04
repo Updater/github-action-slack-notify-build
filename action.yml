@@ -23,6 +23,10 @@ inputs:
   message_text:
     description: 'Optional message text'
     required: false
+  variant:
+    description: sm | lg
+    required: false,
+    default: lg
 outputs:
   message_id:
     description: 'The unique timestamp identifier of the Slack message sent'
